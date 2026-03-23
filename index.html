@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Amama Medical Centre</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --navy: #0b1f5e;
+      --orange: #e85c00;
+      --orange-light: #ff7722;
+      --gold: #c8960c;
+      --cream: #fdf8f2;
+      --white: #ffffff;
+      --gray: #6b7280;
+      --light-gray: #f3f4f6;
+      --border: #e5e0d8;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--navy);
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      background: rgba(253,248,242,0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 6%; height: 70px;
+      transition: box-shadow .3s;
+    }
+    nav.scrolled { box-shadow: 0 4px 30px rgba(11,31,94,.08); }
+
+    .nav-brand { display: flex; flex-direction: column; }
+    .nav-brand-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem; font-weight: 900;
+      color: var(--navy); letter-spacing: -.01em; line-height: 1;
+    }
+    .nav-brand-name span { color: var(--orange); }
+    .nav-brand-sub {
+      font-size: .65rem; font-weight: 500; letter-spacing: .18em;
+      text-transform: uppercase; color: var(--gray); margin-top: 2px;
+    }
+
+    .nav-links { display: flex; gap: 36px; list-style: none; align-items: center; }
+    .nav-links a {
+      font-size: .875rem; font-weight: 500; color: var(--navy);
+      text-decoration: none; letter-spacing: .02em;
+      position: relative; padding-bottom: 3px;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: 0; left: 0;
+      width: 0; height: 2px; background: var(--orange);
+      transition: width .25s;
+    }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-cta {
+      background: var(--orange) !important; color: #fff !important;
+      padding: 9px 22px !important; border-radius: 50px !important;
+      font-weight: 600 !important; transition: background .2s, transform .2s !important;
+    }
+    .nav-cta:hover { background: var(--orange-light) !important; transform: translateY(-1px) !important; }
+    .nav-cta::after { display: none !important; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 100px 6% 60px;
+      position: relative;
+      overflow: hidden;
+      gap: 60px;
+    }
+
+    /* large decorative circle */
+    .hero-circle {
+      position: absolute;
+      right: -180px; top: 50%;
+      transform: translateY(-50%);
+      width: 700px; height: 700px;
+      background: linear-gradient(135deg, #e8f0ff 0%, #c5d5ff 100%);
+      border-radius: 50%;
+      z-index: 0;
+    }
+    .hero-circle-inner {
+      position: absolute;
+      right: 30px; top: 50%;
+      transform: translateY(-50%);
+      width: 480px; height: 480px;
+      background: linear-gradient(135deg, #0b1f5e 0%, #1a3a9e 100%);
+      border-radius: 50%;
+      z-index: 1;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 60px;
+      box-shadow: 0 30px 80px rgba(11,31,94,.3);
+    }
+    .circle-icon { font-size: 4rem; margin-bottom: 16px; }
+    .circle-label {
+      font-family: 'DM Sans', sans-serif; font-size: .75rem; font-weight: 600;
+      letter-spacing: .2em; text-transform: uppercase; color: rgba(255,255,255,.6);
+      margin-bottom: 8px;
+    }
+    .circle-stat { font-family: 'Playfair Display', serif; font-size: 3.5rem; font-weight: 900; color: #fff; line-height: 1; }
+    .circle-desc { font-size: .9rem; color: rgba(255,255,255,.7); margin-top: 8px; line-height: 1.5; }
+
+    .hero-left { position: relative; z-index: 2; }
+
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: rgba(232,92,0,.1); border: 1px solid rgba(232,92,0,.2);
+      color: var(--orange); padding: 7px 16px; border-radius: 50px;
+      font-size: .8rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+      margin-bottom: 28px;
+      animation: riseUp .7s ease both;
+    }
+    .eyebrow-dot { width: 7px; height: 7px; background: var(--orange); border-radius: 50%; animation: pulse 1.4s infinite; }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 5.5vw, 5rem);
+      font-weight: 900; line-height: 1.05;
+      color: var(--navy); letter-spacing: -.02em;
+      animation: riseUp .8s .1s ease both;
+    }
+    .hero-title .accent { color: var(--orange); font-style: italic; }
+    .hero-title .underline-word { position: relative; display: inline-block; }
+    .hero-title .underline-word::after {
+      content: ''; position: absolute; bottom: 2px; left: 0; right: 0;
+      height: 4px; background: var(--gold); border-radius: 2px; opacity: .6;
+    }
+
+    .hero-desc {
+      margin-top: 24px; max-width: 480px;
+      font-size: 1.05rem; line-height: 1.8; color: var(--gray);
+      animation: riseUp .8s .2s ease both;
+    }
+
+    .hero-actions {
+      margin-top: 40px; display: flex; gap: 16px; flex-wrap: wrap;
+      animation: riseUp .8s .3s ease both;
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 30px; border-radius: 50px;
+      font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: .95rem;
+      text-decoration: none; cursor: pointer; border: none;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary { background: var(--navy); color: #fff; box-shadow: 0 8px 24px rgba(11,31,94,.25); }
+    .btn-primary:hover { box-shadow: 0 12px 32px rgba(11,31,94,.35); }
+    .btn-secondary { background: var(--orange); color: #fff; box-shadow: 0 8px 24px rgba(232,92,0,.25); }
+    .btn-secondary:hover { box-shadow: 0 12px 32px rgba(232,92,0,.35); background: var(--orange-light); }
+    .btn-outline { background: transparent; color: var(--navy); border: 2px solid var(--navy); }
+
+    .hero-trust {
+      margin-top: 48px; display: flex; align-items: center; gap: 20px;
+      animation: riseUp .8s .4s ease both;
+    }
+    .trust-badges { display: flex; flex-direction: column; gap: 6px; }
+    .trust-badge {
+      display: flex; align-items: center; gap: 8px;
+      font-size: .82rem; font-weight: 500; color: var(--gray);
+    }
+    .trust-badge .check { color: var(--orange); font-size: .9rem; }
+
+    /* ── TICKER ── */
+    .ticker {
+      background: var(--navy); color: #fff;
+      padding: 14px 0; overflow: hidden; position: relative;
+    }
+    .ticker-inner {
+      display: flex; gap: 60px;
+      animation: ticker 25s linear infinite;
+      white-space: nowrap;
+    }
+    .ticker-item {
+      display: flex; align-items: center; gap: 12px;
+      font-family: 'DM Sans', sans-serif; font-size: .9rem; font-weight: 500;
+      letter-spacing: .04em; flex-shrink: 0;
+    }
+    .ticker-item span { color: var(--orange-light); font-size: 1.1rem; }
+    @keyframes ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+    /* ── SECTIONS ── */
+    section { padding: 100px 6%; }
+
+    .section-tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: .75rem; font-weight: 700; letter-spacing: .18em;
+      text-transform: uppercase; color: var(--orange); margin-bottom: 14px;
+    }
+    .section-tag::before { content: ''; width: 28px; height: 2px; background: var(--orange); }
+
+    .section-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 900; line-height: 1.1;
+      color: var(--navy); letter-spacing: -.02em;
+    }
+    .section-heading em { color: var(--orange); font-style: italic; }
+
+    /* ── SERVICES ── */
+    #services { background: var(--white); }
+
+    .services-top { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 60px; flex-wrap: wrap; gap: 20px; }
+    .services-desc { max-width: 440px; color: var(--gray); font-size: 1rem; line-height: 1.75; margin-top: 14px; }
+
+    .services-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; }
+
+    .service-card {
+      background: var(--cream);
+      padding: 36px 28px;
+      position: relative; overflow: hidden;
+      transition: background .3s;
+      cursor: default;
+    }
+    .service-card::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+      height: 3px; background: var(--orange);
+      transform: scaleX(0); transition: transform .3s;
+    }
+    .service-card:hover { background: var(--navy); }
+    .service-card:hover::after { transform: scaleX(1); }
+    .service-card:hover .sc-icon { background: var(--orange); color: #fff; }
+    .service-card:hover .sc-name { color: #fff; }
+    .service-card:hover .sc-desc { color: rgba(255,255,255,.6); }
+
+    .sc-icon {
+      width: 52px; height: 52px; border-radius: 14px;
+      background: rgba(11,31,94,.08);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; margin-bottom: 18px;
+      transition: background .3s, color .3s;
+    }
+    .sc-name {
+      font-weight: 700; font-size: 1rem; color: var(--navy);
+      margin-bottom: 6px; transition: color .3s;
+    }
+    .sc-desc { font-size: .82rem; color: var(--gray); line-height: 1.6; transition: color .3s; }
+
+    /* ── ABOUT ── */
+    #about { background: var(--cream); }
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+
+    .about-visual {
+      position: relative; height: 500px;
+    }
+    .about-card-big {
+      position: absolute; left: 0; top: 0; right: 60px; bottom: 60px;
+      background: linear-gradient(145deg, var(--navy), #1a3a9e);
+      border-radius: 24px;
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 12px; padding: 48px;
+      box-shadow: 0 24px 60px rgba(11,31,94,.25);
+    }
+    .about-card-big .big-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 5rem; font-weight: 900; color: #fff; line-height: 1;
+    }
+    .about-card-big p { color: rgba(255,255,255,.7); font-size: .95rem; text-align: center; line-height: 1.6; }
+
+    .about-card-small {
+      position: absolute; right: 0; bottom: 0;
+      width: 200px; height: 200px;
+      background: var(--orange);
+      border-radius: 20px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 8px; padding: 24px;
+      box-shadow: 0 16px 40px rgba(232,92,0,.35);
+    }
+    .about-card-small .small-num { font-family: 'Playfair Display', serif; font-size: 3rem; font-weight: 900; color: #fff; line-height: 1; }
+    .about-card-small p { color: rgba(255,255,255,.85); font-size: .8rem; text-align: center; font-weight: 500; }
+
+    .about-content .section-heading { margin-bottom: 22px; }
+    .about-content p { color: var(--gray); line-height: 1.8; margin-bottom: 16px; font-size: 1rem; }
+
+    .checklist { list-style: none; margin-top: 28px; display: flex; flex-direction: column; gap: 14px; }
+    .checklist li {
+      display: flex; align-items: flex-start; gap: 14px;
+      font-size: .95rem; font-weight: 500; color: var(--navy);
+    }
+    .checklist li .chk {
+      width: 24px; height: 24px; border-radius: 50%;
+      background: rgba(232,92,0,.1); border: 2px solid var(--orange);
+      display: flex; align-items: center; justify-content: center;
+      font-size: .7rem; color: var(--orange); flex-shrink: 0; margin-top: 1px;
+    }
+
+    /* ── CONTACT ── */
+    #contact { background: var(--white); }
+    .contact-layout { display: grid; grid-template-columns: 1fr 1.4fr; gap: 60px; margin-top: 60px; align-items: start; }
+
+    .contact-info-cards { display: flex; flex-direction: column; gap: 16px; }
+    .info-card {
+      background: var(--cream); border: 1px solid var(--border);
+      border-radius: 16px; padding: 22px 24px;
+      display: flex; align-items: center; gap: 16px;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .info-card:hover { border-color: var(--orange); box-shadow: 0 8px 24px rgba(232,92,0,.1); }
+    .info-card .ic-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      background: var(--navy); color: #fff;
+      display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0;
+    }
+    .info-card .ic-label { font-size: .72rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--gray); }
+    .info-card .ic-value { font-weight: 700; color: var(--navy); font-size: 1rem; margin-top: 3px; }
+    .info-card a.ic-value { color: var(--orange); text-decoration: none; }
+    .info-card a.ic-value:hover { text-decoration: underline; }
+
+    .hours-badge {
+      display: flex; align-items: center; gap: 12px;
+      background: var(--navy); color: #fff;
+      padding: 18px 24px; border-radius: 16px; margin-top: 8px;
+    }
+    .hours-badge .hb-dot { width: 10px; height: 10px; background: #4ade80; border-radius: 50%; animation: pulse 1.4s infinite; }
+    .hours-badge-text { font-weight: 700; font-size: 1.05rem; }
+    .hours-badge-sub { font-size: .8rem; color: rgba(255,255,255,.6); margin-top: 2px; }
+
+    .map-wrapper { border-radius: 20px; overflow: hidden; border: 2px solid var(--border); box-shadow: 0 16px 48px rgba(11,31,94,.1); }
+    .map-wrapper iframe { display: block; width: 100%; height: 380px; border: none; }
+    .map-address {
+      background: var(--cream); padding: 18px 22px;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 10px;
+    }
+    .map-address span { font-size: .88rem; color: var(--gray); }
+    .map-address strong { display: block; font-size: .95rem; color: var(--navy); font-weight: 600; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--navy); color: rgba(255,255,255,.8);
+      padding: 48px 6% 32px;
+    }
+    .footer-top {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      flex-wrap: wrap; gap: 30px; padding-bottom: 36px;
+      border-bottom: 1px solid rgba(255,255,255,.1);
+    }
+    .footer-brand-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem; font-weight: 900; color: #fff;
+    }
+    .footer-brand-name span { color: var(--orange-light); }
+    .footer-brand-sub { font-size: .8rem; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.5); margin-top: 4px; }
+    .footer-contacts { display: flex; flex-direction: column; gap: 6px; }
+    .footer-contacts a { color: rgba(255,255,255,.7); text-decoration: none; font-size: .9rem; }
+    .footer-contacts a:hover { color: var(--orange-light); }
+    .footer-bottom {
+      margin-top: 28px; display: flex; justify-content: space-between;
+      flex-wrap: wrap; gap: 10px; font-size: .8rem; color: rgba(255,255,255,.35);
+    }
+
+    /* ANIMATIONS */
+    @keyframes riseUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.3)} }
+    .reveal { opacity:0; transform:translateY(24px); transition:opacity .65s ease,transform .65s ease; }
+    .reveal.visible { opacity:1; transform:none; }
+
+    /* RESPONSIVE */
+    @media(max-width:900px){
+      .hero{grid-template-columns:1fr;} .hero-circle,.hero-circle-inner{display:none;}
+      .about-grid{grid-template-columns:1fr;} .about-visual{display:none;}
+      .services-grid{grid-template-columns:1fr 1fr;}
+      .contact-layout{grid-template-columns:1fr;}
+      .nav-links{display:none;}
+    }
+    @media(max-width:600px){
+      .services-grid{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-brand">
+    <div class="nav-brand-name">Amama <span>Medical</span> Centre</div>
+    <div class="nav-brand-sub">Comprehensive Care for All Ages</div>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="tel:0530932292" class="nav-cta">📞 Call Now</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow"><span class="eyebrow-dot"></span> 24/7 Medical Service Available</div>
+    <h1 class="hero-title">
+      <span class="underline-word">Amama</span><br>
+      <span class="accent">Medical</span><br>
+      Centre
+    </h1>
+    <p class="hero-desc">Comprehensive Care for All Ages. From general outpatient services to specialized surgery, maternal health, and home care — we are your trusted health partner in Wa.</p>
+    <div class="hero-actions">
+      <a href="tel:0530932292" class="btn btn-secondary">📞 0530 932 292</a>
+      <a href="#services" class="btn btn-primary">View Our Services</a>
+    </div>
+    <div class="hero-trust">
+      <div class="trust-badges">
+        <div class="trust-badge"><span class="check">✔</span> Open 24 Hours, 7 Days a Week</div>
+        <div class="trust-badge"><span class="check">✔</span> 12+ Specialized Services</div>
+        <div class="trust-badge"><span class="check">✔</span> Home Care Available</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Decorative right side -->
+  <div style="position:relative;z-index:1;">
+    <div class="hero-circle"></div>
+    <div class="hero-circle-inner">
+      <div class="circle-icon">🏥</div>
+      <div class="circle-label">Available</div>
+      <div class="circle-stat">24/7</div>
+      <div class="circle-desc">Round-the-clock care for you and your family</div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <div class="ticker-item"><span>✦</span> General OPD</div>
+    <div class="ticker-item"><span>✦</span> Inpatient Care</div>
+    <div class="ticker-item"><span>✦</span> Maternal & Child Health</div>
+    <div class="ticker-item"><span>✦</span> Surgery</div>
+    <div class="ticker-item"><span>✦</span> Ultrasonography</div>
+    <div class="ticker-item"><span>✦</span> Laboratory</div>
+    <div class="ticker-item"><span>✦</span> Pharmacy</div>
+    <div class="ticker-item"><span>✦</span> Wellness Clinics</div>
+    <div class="ticker-item"><span>✦</span> Adolescent Health</div>
+    <div class="ticker-item"><span>✦</span> Travel Medicine</div>
+    <div class="ticker-item"><span>✦</span> Outreach & Consultancy</div>
+    <div class="ticker-item"><span>✦</span> Home Care</div>
+    <!-- duplicate for seamless loop -->
+    <div class="ticker-item"><span>✦</span> General OPD</div>
+    <div class="ticker-item"><span>✦</span> Inpatient Care</div>
+    <div class="ticker-item"><span>✦</span> Maternal & Child Health</div>
+    <div class="ticker-item"><span>✦</span> Surgery</div>
+    <div class="ticker-item"><span>✦</span> Ultrasonography</div>
+    <div class="ticker-item"><span>✦</span> Laboratory</div>
+    <div class="ticker-item"><span>✦</span> Pharmacy</div>
+    <div class="ticker-item"><span>✦</span> Wellness Clinics</div>
+    <div class="ticker-item"><span>✦</span> Adolescent Health</div>
+    <div class="ticker-item"><span>✦</span> Travel Medicine</div>
+    <div class="ticker-item"><span>✦</span> Outreach & Consultancy</div>
+    <div class="ticker-item"><span>✦</span> Home Care</div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="services-top">
+    <div class="reveal">
+      <div class="section-tag">What We Offer</div>
+      <div class="section-heading">Our <em>Services</em></div>
+      <p class="services-desc">A complete spectrum of healthcare services delivered with compassion, precision, and dedication — for every member of your family.</p>
+    </div>
+    <a href="tel:0530932292" class="btn btn-secondary reveal">Book a Visit →</a>
+  </div>
+
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <div class="sc-icon">🏥</div>
+      <div class="sc-name">General OPD</div>
+      <div class="sc-desc">Outpatient consultations for all general health concerns</div>
+    </div>
+    <div class="service-card reveal">
+      <div class="sc-icon">🛏️</div>
+      <div class="sc-name">Inpatient Care</div>
+      <div class="sc-desc">Comfortable inpatient admission and monitoring</div>
+    </div>
+    <div class="service-card reveal">
+      <div class="sc-icon">🤱</div>
+      <div class="sc-name">Maternal & Child Health</div>
+      <div class="sc-desc">Prenatal, postnatal and child wellness services</div>
+    </div>
+    <div class="service-card reveal">
+      <div class="sc-icon">🔬</div>
+      <div class="sc-name">Surgery</div>
+      <div class="sc-desc">General and specialized surgical procedures</div>
+    </div>
+    <div class="service-card reveal">
+      <div class="sc-icon">🩻</div>
+      <div class="sc-name">Ultrasonography</div>
+      <div class="sc-desc">Advanced imaging and diagnostic ultrasound</div>
+    </div>
+    <div class="service-card reveal">
+      <div class="sc-icon">🧪</div>
+      <div class="sc-name">Laboratory</div>
+      <div class="sc-desc">Comprehensive diagnostic laboratory testing</div>
+    </div>
+    <div class="service-card reveal">
+      <div class="sc-icon">💊</div>
+      <div class="sc-name">Pharmacy</div>
+      <div class="sc-desc">On-site pharmacy for all prescriptions and medications</div>
+    </div>
+    <div class="service-card reveal">
+      <div class="sc-icon">🧘</div>
+      <div class="sc-name">Wellness Clinics</div>
+      <div class="sc-desc">Preventive care and wellness management programs</div>
+    </div>
+    <div class="service-card reveal">
+      <div class="sc-icon">🧒</div>
+      <div class="sc-name">Adolescent Health</div>
+      <div class="sc-desc">Tailored care for teens and young adults</div>
+    </div>
+    <div class="service-card reveal">
+      <div class="sc-icon">✈️</div>
+      <div class="sc-name">Travel Medicine</div>
+      <div class="sc-desc">Vaccinations and health advice for travelers</div>
+    </div>
+    <div class="service-card reveal">
+      <div class="sc-icon">🤝</div>
+      <div class="sc-name">Outreach & Consultancy</div>
+      <div class="sc-desc">Community outreach and expert medical consultancy</div>
+    </div>
+    <div class="service-card reveal">
+      <div class="sc-icon">🏠</div>
+      <div class="sc-name">Home Care</div>
+      <div class="sc-desc">Professional medical care delivered to your home</div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-visual reveal">
+      <div class="about-card-big">
+        <div class="big-num">24/7</div>
+        <p>We never close. Our doors and hearts are always open for your health needs.</p>
+      </div>
+      <div class="about-card-small">
+        <div class="small-num">12+</div>
+        <p>Specialized Services</p>
+      </div>
+    </div>
+    <div class="about-content reveal">
+      <div class="section-tag">Why Choose Us</div>
+      <div class="section-heading">Your Health, Our <em>Priority</em></div>
+      <p>At Amama Medical Centre, we believe every person deserves access to quality healthcare, regardless of age or background. Our team of dedicated professionals brings expertise, compassion, and cutting-edge equipment to every patient interaction.</p>
+      <p>From routine checkups to complex surgical procedures, we are fully equipped to handle all your health needs under one roof.</p>
+      <ul class="checklist">
+        <li><span class="chk">✔</span> Experienced and caring medical team</li>
+        <li><span class="chk">✔</span> State-of-the-art diagnostic equipment</li>
+        <li><span class="chk">✔</span> Comprehensive maternal & child health programs</li>
+        <li><span class="chk">✔</span> Convenient home care services</li>
+        <li><span class="chk">✔</span> Travel medicine and community outreach</li>
+        <li><span class="chk">✔</span> Round-the-clock emergency availability</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="reveal">
+    <div class="section-tag">Get In Touch</div>
+    <div class="section-heading">Visit or <em>Contact Us</em></div>
+  </div>
+
+  <div class="contact-layout">
+    <div class="contact-info-cards">
+      <div class="info-card reveal">
+        <div class="ic-icon">📞</div>
+        <div>
+          <div class="ic-label">Primary Phone</div>
+          <a href="tel:0530932292" class="ic-value">0530 932 292</a>
+        </div>
+      </div>
+      <div class="info-card reveal">
+        <div class="ic-icon">📞</div>
+        <div>
+          <div class="ic-label">Secondary Phone</div>
+          <a href="tel:0200762742" class="ic-value">0200 762 742</a>
+        </div>
+      </div>
+      <div class="info-card reveal">
+        <div class="ic-icon">✉️</div>
+        <div>
+          <div class="ic-label">Email</div>
+          <a href="mailto:wacitymedics.gh@gmail.com" class="ic-value">wacitymedics.gh@gmail.com</a>
+        </div>
+      </div>
+      <div class="info-card reveal">
+        <div class="ic-icon">📘</div>
+        <div>
+          <div class="ic-label">Facebook</div>
+          <div class="ic-value">Amama Medical Centre</div>
+        </div>
+      </div>
+      <div class="info-card reveal">
+        <div class="ic-icon">📍</div>
+        <div>
+          <div class="ic-label">Address</div>
+          <div class="ic-value">Napogbakole Ext. (XW-0159-8119)<br>Adjacent St. Benedicts Parish</div>
+        </div>
+      </div>
+      <div class="info-card reveal">
+        <div class="ic-icon">🗺️</div>
+        <div>
+          <div class="ic-label">Digital / Google Address</div>
+          <div class="ic-value">2GQ2+2QF, Wa</div>
+        </div>
+      </div>
+      <div class="hours-badge reveal">
+        <span class="hb-dot"></span>
+        <div>
+          <div class="hours-badge-text">Open 24 Hours, 7 Days</div>
+          <div class="hours-badge-sub">We are always here for you</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="map-wrapper reveal">
+      <iframe
+       src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2818.6715469468627!2d-2.5006485268420535!3d10.03769207238886!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xfcd7d53cb88a12f%3A0x5f305037321a9a4f!2sAmama%20Medical%20Centre!5e1!3m2!1sen!2sgh!4v1774249210693!5m2!1sen!2sgh" 
+        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+        title="Amama Medical Centre Location">
+      </iframe>
+      <div class="map-address">
+        <div>
+          <strong>Amama Medical Centre</strong>
+          <span>Napogbakole Ext., Wa — Digital Address: 2GQ2+2QF — Adjacent St. Benedicts Parish</span>
+        </div>
+        <a href="https://maps.google.com/?q=Napogbakole+Ext,Wa,Ghana" target="_blank" class="btn btn-secondary" style="padding:10px 20px;font-size:.85rem">Get Directions ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-brand-name">Amama <span>Medical</span> Centre</div>
+      <div class="footer-brand-sub">Comprehensive Care for All Ages</div>
+    </div>
+    <div class="footer-contacts">
+      <a href="tel:0530932292">📞 0530 932 292</a>
+      <a href="tel:0200762742">📞 0200 762 742</a>
+      <a href="mailto:wacitymedics.gh@gmail.com">✉️ wacitymedics.gh@gmail.com</a>
+    </div>
+    <div style="max-width:220px;font-size:.85rem;line-height:1.7;color:rgba(255,255,255,.5)">
+      Napogbakole Ext. (XW-0159-8119)<br>
+      2GQ2+2QF, Wa<br>
+      Adjacent St. Benedicts Parish
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Amama Medical Centre. All rights reserved.</span>
+    <span>Open 24/7 · Wa, Ghana</span>
+  </div>
+</footer>
+
+<script>
+  // Navbar shadow on scroll
+  const nav = document.getElementById('navbar');
+  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 20));
+
+  // Scroll reveal
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach((el, i) => {
+    el.style.transitionDelay = `${(i % 6) * 0.07}s`;
+    io.observe(el);
+  });
+</script>
+</body>
+</html>
